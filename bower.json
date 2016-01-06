@@ -20,5 +20,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "iris-polymer-importer": "https://github.com/sdk-group/iris-polymer-importer.git"
+  }
 }
