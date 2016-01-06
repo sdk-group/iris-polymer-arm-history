@@ -40,6 +40,15 @@
             original.log.apply(original, arguments)
           }
         }
+
+        window.onerror = function(message, url, lineNumber) {
+          if (history) history.addHistoryRecord('error', message, {
+            url: url,
+            line: lineNumber
+          });
+          return true;
+        };
+
       }());
 
       Polymer({
@@ -47,8 +56,10 @@
         properties: {},
         ready() {
           history = history || this.$.meta.byKey('api').require('history');
+        },
+        getHistoryPage(type, limit, offset) {
+          return history.getHistoryPage(type, limit, offset)
         }
-
       });
     })();
   </script>

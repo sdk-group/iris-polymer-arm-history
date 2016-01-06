@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
 <dom-module id="iris-arm-history-view">
   <template>
@@ -9,9 +10,12 @@
         display: block;
       }
     </style>
-
     <iris-arm-history id="history"></iris-arm-history>
-
+    <template id="list" is="dom-repeat" items="{{history_page}}" as="record">
+      <paper-item>
+        {{record.message}}
+      </paper-item>
+    </template>
   </template>
 
   <script>
@@ -19,8 +23,19 @@
       'use strict'
       Polymer({
         is: 'iris-arm-history-view',
-        properties: {},
-        ready() {}
+        properties: {
+          history_page: {
+            type: Array,
+            value: []
+          }
+        },
+        ready() {
+          // this.history_page = this.$.history.getHistoryPage();
+        },
+        redraw() {
+          let page = this.$.history.getHistoryPage();
+          this.set('history_page', page.slice());
+        }
       });
     })();
   </script>
