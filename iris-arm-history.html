@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
+<link rel="import" href="iris-arm-history-view.html">
+
+<dom-module id="iris-arm-history">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <iron-meta id="meta"></iron-meta>
+  </template>
+
+  <script>
+    (function() {
+      'use strict'
+      let history = false;
+
+      (function() {
+        var original = window.console
+        window.console = {
+          log: function() {
+            // do sneaky stuff
+            if (history) history.log(Array.prototype.slice.call(arguments));
+            original.log.apply(original, arguments)
+          },
+          warn: function() {
+            // do sneaky stuff
+            if (history) history.warn(Array.prototype.slice.call(arguments));
+            original.warn.apply(original, arguments)
+          },
+          error: function() {
+            // do sneaky stuff
+            if (history) history.error(Array.prototype.slice.call(arguments));
+            original.error.apply(original, arguments)
+          },
+          silent: function() {
+            original.log.apply(original, arguments)
+          }
+        }
+      }());
+
+      Polymer({
+        is: 'iris-arm-history',
+        properties: {},
+        ready() {
+          history = history || this.$.meta.byKey('api').require('history');
+        }
+
+      });
+    })();
+  </script>
+
+</dom-module>
