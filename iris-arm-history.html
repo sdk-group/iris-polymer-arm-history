@@ -12,7 +12,7 @@
         display: block;
       }
     </style>
-    <iron-meta id="meta"></iron-meta>
+    <iris-api-controller id="api"></iris-api-controller>
   </template>
 
   <script>
@@ -57,7 +57,7 @@
         is: 'iris-arm-history',
         properties: {},
         ready() {
-          history = history || this.$.meta.byKey('api').require('history');
+          history = history || this.$.api.require('history');
         },
         getHistoryPage(type, limit, offset) {
           return history.getHistoryPage(type, limit, offset)
