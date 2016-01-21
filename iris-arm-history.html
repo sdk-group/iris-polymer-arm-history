@@ -56,7 +56,7 @@
       Polymer({
         is: 'iris-arm-history',
         properties: {},
-        ready() {
+        attached() {
           history = history || this.$.api.require('history');
         },
         getHistoryPage(type, limit, offset) {
