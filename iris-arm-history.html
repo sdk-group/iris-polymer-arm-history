@@ -4,66 +4,53 @@
 <link rel="import" href="../../bower_components/iron-meta/iron-meta.html">
 <link rel="import" href="iris-arm-history-view.html">
 
-<dom-module id="iris-arm-history">
-  <template>
-    <style include="shared-styles"></style>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <iris-api-controller id="api"></iris-api-controller>
-  </template>
+<script>
+  (function() {
+    'use strict'
+    let history = false;
 
-  <script>
     (function() {
-      'use strict'
-      let history = false;
-
-      (function() {
-        var original = window.console
-        window.console = {
-          log: function() {
-            // do sneaky stuff
-            if (history) history.log(Array.prototype.slice.call(arguments));
-            original.log.apply(original, arguments)
-          },
-          warn: function() {
-            // do sneaky stuff
-            if (history) history.warn(Array.prototype.slice.call(arguments));
-            original.warn.apply(original, arguments)
-          },
-          error: function() {
-            // do sneaky stuff
-            if (history) history.error(Array.prototype.slice.call(arguments));
-            original.error.apply(original, arguments)
-          },
-          silent: function() {
-            original.log.apply(original, arguments)
-          }
-        }
-
-        window.onerror = function(message, url, lineNumber) {
-          if (history) history.addHistoryRecord('error', message, {
-            url: url,
-            line: lineNumber
-          });
-          return true;
-        };
-
-      }());
-
-      Polymer({
-        is: 'iris-arm-history',
-        properties: {},
-        attached() {
-          history = history || this.$.api.require('history');
+      var original = window.console
+      window.console = {
+        log: function() {
+          // do sneaky stuff
+          if (history) history.log(Array.prototype.slice.call(arguments));
+          original.log.apply(original, arguments)
         },
-        getHistoryPage(type, limit, offset) {
-          return history.getHistoryPage(type, limit, offset)
+        warn: function() {
+          // do sneaky stuff
+          if (history) history.warn(Array.prototype.slice.call(arguments));
+          original.warn.apply(original, arguments)
+        },
+        error: function() {
+          // do sneaky stuff
+          if (history) history.error(Array.prototype.slice.call(arguments));
+          original.error.apply(original, arguments)
+        },
+        silent: function() {
+          original.log.apply(original, arguments)
         }
-      });
-    })();
-  </script>
+      }
 
-</dom-module>
+      window.onerror = function(message, url, lineNumber) {
+        if (history) history.addHistoryRecord('error', message, {
+          url: url,
+          line: lineNumber
+        });
+        return true;
+      };
+
+    }());
+
+    Polymer({
+      is: 'iris-arm-history',
+      properties: {},
+      attached() {
+        history = history || new IRIS.History();
+      },
+      getHistoryPage(type, limit, offset) {
+        return history.getHistoryPage(type, limit, offset)
+      }
+    });
+  })();
+</script>
